@@ -21,6 +21,13 @@ Change the directory
 
 `cd ExportWifi`
 
+TO FIND OUT YOUR IP-ADDRESS:
+---------------------------
+
+Linux: `ifconfig or ip a`
+
+Windows: `ipconfig`
+
 Start "wifi.py" with
 
  `python wifi.py -aip 127.0.0.1`
