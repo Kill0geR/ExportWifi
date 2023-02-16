@@ -15,18 +15,18 @@ HOW DOES ExportWifi WORK?
 -------------------------
 The ip address and the port number should be the same so the connection will work
 
-HOW TO USE ExportWifi?
----------------------
-Change the directory
-
-`cd ExportWifi`
-
 TO FIND OUT YOUR IP-ADDRESS:
 ---------------------------
 
 Linux: `ifconfig or ip a`
 
 Windows: `ipconfig`
+
+HOW TO USE ExportWifi?
+---------------------
+Change the directory
+
+`cd ExportWifi`
 
 Start "wifi.py" with
 
