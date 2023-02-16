@@ -9,7 +9,12 @@ To install ExportWifi simply type:
 
 `git clone https://github.com/Kill0geR/ExportWifi`
 
+and
+
+`pip install ExportWifi`
+
 In your Terminal
+
 
 HOW DOES ExportWifi WORK?
 -------------------------
