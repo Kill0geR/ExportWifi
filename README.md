@@ -22,14 +22,19 @@ Change the directory
 `cd ExportWifi`
 
 Start "wifi.py" with
+
  `python wifi.py -aip 127.0.0.1`
  
  -aip stands for ip of attacker
+ 
  -cf stands for create file
+ 
  -ds stands for demon server and means to have the server in your directory
+ 
  -p stands for ports and displays the port of the attacker
  
  If you need help simply type:
+ 
  `python wifi.py -help`
 
 Output of Server
