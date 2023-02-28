@@ -312,7 +312,7 @@ ___________                             __   __      __.__  _____.__
                 print("This XML File already exists")
 
         print("\nConnection has been established")
-        print(f"{len(wlan_liste)} Wifi files have been saved to your directory")
+        print(f'{len(wlan_liste)} Wifi files have been saved to "FOUND_PASSWORDS" and "XML_FILES"')
         if check >= 1: print(f"The current WI-FI and Password of the target is \n\nWI-FI: {current_name}\nPassword: {current_password}")
         else: print(f"The current WI-FI of the target is \n\nWI-FI: {current_name}\nThe password couldn't be detected")
         print("THANK YOUR FOR USING EXPORTWIFI")
