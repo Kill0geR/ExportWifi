@@ -5,15 +5,29 @@ Created by: Fawaz Bashiru
 
 This a module which imports WI-FI files and detects the current WI-FI name and the current WI-FI password of the target. Every imported file is going to be saved in the directory where your server is located.
 
+![kali](https://user-images.githubusercontent.com/106278241/219510965-e9425472-a91c-451b-96a0-704e5dbca062.png)
+
 To install ExportWifi simply type:
 
 `git clone https://github.com/Kill0geR/ExportWifi`
 
+and
+
+`pip install ExportWifi`
+
 In your Terminal
+
 
 HOW DOES ExportWifi WORK?
 -------------------------
 The ip address and the port number should be the same so the connection will work
+
+TO FIND OUT YOUR IP-ADDRESS:
+---------------------------
+
+Linux: `ifconfig or ip a`
+
+Windows: `ipconfig`
 
 HOW TO USE ExportWifi?
 ---------------------
@@ -22,14 +36,19 @@ Change the directory
 `cd ExportWifi`
 
 Start "wifi.py" with
+
  `python wifi.py -aip 127.0.0.1`
  
  -aip stands for ip of attacker
+ 
  -cf stands for create file
+ 
  -ds stands for demon server and means to have the server in your directory
+ 
  -p stands for ports and displays the port of the attacker
  
  If you need help simply type:
+ 
  `python wifi.py -help`
 
 Output of Server
