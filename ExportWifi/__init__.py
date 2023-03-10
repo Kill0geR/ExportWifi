@@ -198,13 +198,15 @@ class WlanServer:
         self.ip = ip
         self.port = port
         self.idx = None
+        
     def get_key_material(self, file):
-        for line in file:
-            if "keyMaterial" in line:
-                teilen = line.split(">")
-                lst_passwort = teilen[1].split("<")
-                current_password = lst_passwort[0]
-                return current_password
+    for line in file:
+        if "keyMaterial" in line:
+            teilen = line.split(">")
+            lst_passwort = teilen[1].split("<")
+            current_password = lst_passwort[0]
+            return current_password
+    return None
 
     def start(self):
         gui = """
