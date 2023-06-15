@@ -1,12 +1,17 @@
 import time
 import subprocess
-import pyautogui
-import tkinter as tk
 import threading
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
 import os
 import socket
+
+try:
+    import pyautogui
+    import tkinter as tk
+except KeyError:
+    pass
+
 
 wlanname = ""
 pathsave = ""
