@@ -92,5 +92,4 @@ server.start()
 
 
 except OSError:
-    print(gui)
     print("CHECK YOUR IP-ADDRESS")
