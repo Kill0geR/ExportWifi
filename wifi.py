@@ -22,7 +22,7 @@ try:
     if "-aip" in lst:
         idx = lst.index("-aip")
         try:
-            ip = str(lst[idx +1])
+            ip = str(lst[idx + 1])
             numbers = "1 2 3 4 5 6 7 8 9 0".split()
             port_number = int("".join(random.sample(numbers, 4)))
 
@@ -86,13 +86,10 @@ server.start()
         print(gui)
         print("\n-aip INSERT THE SERVERS IP\n-cf  CREATES TARGET FILE WHICH YOU SEND TO ANY TARGET\n-p   SAVES ALL THE PORTS OF THE CURRENT SERVER\n-ds  CREATES A SERVER WITH THE SAME PORTS AS THE TARGET")
 
-    if "-aip" not in lst:
+    if "-aip" not in lst and len(lst) == 1:
         print(gui)
         print("YOU MUST SPECIFY YOUR IP-ADDRESS WITH '-aip'. IF YOU NEED HELP SIMPLY TYPE 'python wifi.py -help'")
 
-    if len(lst) == 1:
-        print(gui)
-        print("IF YOU NEED HELP SIMPLY TYPE 'python wifi.py -help'")
 
 except OSError:
     print(gui)
