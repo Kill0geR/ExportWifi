@@ -111,6 +111,7 @@ class WlanClient:
             #Create a file where all the data is being stored in
             file.write(str_command)
 
+
         with open("wlan.txt", "r+") as wlan_file:
             #Open the file again
             wlan_name_liste = []
@@ -121,10 +122,14 @@ class WlanClient:
                         #Find the current Wifi of the target
                         name = wort.split("\r")
                         wlan_name_liste.append(name)
+        try:
+            for wlan in wlan_name_liste[0]:
+                wlan = wlan.split("\\r")
+                richtiges_wlan = wlan[0]
 
-        for wlan in wlan_name_liste[0]:
-            wlan = wlan.split("\\r")
-            richtiges_wlan = wlan[0]
+        except IndexError:
+            print("No wifi connected")
+            os._exit(0)
 
         if os.path.exists("wlan.txt"): os.remove("wlan.txt")
 
